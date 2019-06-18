@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jQuery-2.2.2-min.js"></script>
+</head>
+<body>
+	<div style="border: 2px red solid;width: 400px;margin: 0 auto;">
+		欢迎光临，<span id="username" th:text="${key}">用户名</span>
+		<table style="border: 2px black solid;margin-top: 50px;width: 400px;">
+		<thead>
+		    <tr>
+		      <th>商品姓名</th>
+		      <th>单价</th>
+		      <th>类别</th>
+		      <th>评论数量</th>
+		    </tr>
+	  	</thead>
+	    <tbody id="message">
+		  	
+	  	</tbody>
+		</table>
+	</div>
+	
+	<script type="text/javascript">
+		function findAll(){
+			$.ajax({
+				url:"/goods",
+				type:"get",
+				async:true,
+				dataType:"json",
+				success:function(mes){
+					console.info(mes);
+					var str = "";
+					for(var i=0;i<mes.length;i++){
+						console.info(mes[i].id);
+						str+="<tr>"+
+							 "<input type='hidden' id='gid' value='"+mes[i].id+"'>"+
+						     "<td style='border: 2px black solid;text-align: center;'>"+mes[i].name+"</td>"+
+						     "<td style='border: 2px black solid;text-align: center;'>"+mes[i].price+"</td>"+
+						     "<td style='border: 2px black solid;text-align: center;'>"+mes[i].type+"</td>"+
+						     "<td style='border: 2px black solid;text-align: center;'>"+mes[i].commentNum+"</td>"+
+							 "</tr>";
+							 
+					}
+					$("#message").html(str);
+					$("#message tr").click(function(){
+						var value = $(this).children("#gid").val();
+						var username = document.getElementById("username").innerText;
+						window.location.href="/goodsid?id="+value+"&username="+username;
+					});
+				}
+			});
+		}
+		findAll();
+		
+		
+			
+		
+		
+		
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.dao.IGoodsDao">
+	
+	<select id="findAll" resultMap="map">
+		select * from t_goods;
+	</select>
+	<resultMap type="GoodsBean" id="map">
+		<id property="id" column="g_id"/>
+		<result property="name" column="g_name"/>
+		<result property="price" column="g_price"/>
+		<result property="type" column="g_type"/>
+		<result property="commentNum" column="g_commentNum"/>
+	</resultMap>
+
+
+	<select id="findById" parameterType="int" resultMap="map">
+		select * from t_goods where g_id=#{id};
+	</select>
+	
+</mapper>

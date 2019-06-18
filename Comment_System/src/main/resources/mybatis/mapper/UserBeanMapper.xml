@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.dao.IUserDao">
+	<select id="findAll" resultMap="map">
+		select * from t_user;
+	</select>
+	
+	<select id="findByNameAndPwd" parameterType="UserBean" resultMap="map">
+		select * from t_user where u_name=#{name} and u_password=#{password};
+	</select>
+	
+	<insert id="addUser" parameterType="UserBean">
+		insert into t_user(u_name,u_password) values(#{name},#{password});
+	</insert>
+	
+	<select id="findByName" parameterType="String" resultMap="map">
+		select * from t_user where u_name=#{name};
+	</select>
+	
+	
+	<resultMap id="map" type="UserBean">
+		<id property="id" column="u_id"></id>
+		<result property="name" column="u_name"></result>
+		<result property="password" column="u_password"></result>
+	</resultMap>
+	
+</mapper>

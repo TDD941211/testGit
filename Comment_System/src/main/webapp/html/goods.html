@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../js/jQuery-2.2.2-min.js"></script>
+</head>
+<body>
+	<div style="border: 2px red solid;width: 700px;height: 400px;margin: 0 auto;">
+		<img src="../img/cat.jpg">
+		<div style="border: 1px black solid;width: 200px;height: 300px;position: absolute;top: 50px;left: 900px;">
+			<label>商品名称：</label><span th:text="${goods.name}">名字</span><br><br>
+			<label>类型：</label><span th:text="${goods.type}">类型</span><br><br>
+			<label>单价：</label><span th:text="${goods.price}">单价</span><br><br>
+			<span id="gid" th:text="${goods.id}" th:hidden="true"></span>
+			<span id="uid" th:text="${uid}" th:hidden="true"></span>
+			<span id="name" th:text="${username}" th:hidden="true"></span>
+			<span id="password" th:text="${password}" th:hidden="true"></span>
+		</div>
+	</div>
+	
+	<div>
+		<table style="border: 2px black solid;margin-left:600px;margin-top: 50px;width: 500px;">
+		<thead>
+		    <tr>
+		      <th>评论人</th>
+		      <th>评论时间</th>
+		      <th>内容</th>
+		    </tr> 
+	  	</thead>
+	    <tbody id="message">
+		  	
+	  	</tbody>
+		</table>
+	</div>
+	
+	<div style="border: 0px black solid;margin-left:600px;margin-top: 50px;width: 500px;">
+		<label style="margin-top: 10px;">评论内容：</label><textarea id="tid" style="width: 300px;height: 100px;"></textarea>
+	</div>
+	<button style="margin-left: 750px;margin-top: 20px;" type="button" onclick="addComment()">评论</button>
+	<button style="margin-top: 20px;margin-left: 50px;" type="button" onclick="jump()">返回主页面</button>
+	
+	
+	
+	<script type="text/javascript">
+		var gid = document.getElementById("gid").innerText;
+		var uid = document.getElementById("uid").innerText;
+		var name = document.getElementById("name").innerText;
+		var password = document.getElementById("password").innerText;
+		function findComment(gid){
+			$.ajax({
+				url:"/comment",
+				type:"post",
+				async:true,
+				dataType:"json",
+				data:"gid="+gid,
+				success:function(mes){
+					console.info(mes);
+					var str = "";
+					for(var i=0;i<mes.length;i++){
+						str+="<tr>"+
+						     "<td style='border: 1px black solid;text-align: center;'>"+mes[i].user.name+"</td>"+
+						     "<td style='border: 1px black solid;text-align: center;'>"+mes[i].time+"</td>"+
+						     "<td style='border: 1px black solid;text-align: center;'>"+mes[i].content+"</td>"+
+				     		 "</tr>";
+					}
+					$("#message").html(str);
+				}
+			});
+		}
+		findComment(gid);
+		
+		function jump(){
+			window.location.href="/login?name="+name+"&password="+password;
+		}
+		
+		function addComment(){
+			var value = $("#tid").val();
+			var time = new Date();
+			var time2 = time.toLocaleDateString();
+			$.ajax({
+				url:"/addComment",
+				type:"post",
+				async:true,
+				dataType:"json",
+				data:"value="+value+"&time="+time2+"&gid="+gid+"&uid="+uid,
+				success:function(mes){
+					var str = "";
+					for(var i=0;i<mes.length;i++){
+						str+="<tr>"+
+						     "<td style='border: 1px black solid;text-align: center;'>"+mes[i].user.name+"</td>"+
+						     "<td style='border: 1px black solid;text-align: center;'>"+mes[i].time+"</td>"+
+						     "<td style='border: 1px black solid;text-align: center;'>"+mes[i].content+"</td>"+
+				     		 "</tr>";
+					}
+					$("#message").html(str);
+				}
+			});
+		}
+		
+	</script>
+</body>
+</html>

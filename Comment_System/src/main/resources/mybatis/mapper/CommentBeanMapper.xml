@@ -1,0 +1,26 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.dao.ICommentDao">
+	
+	<select id="findAll" parameterType="int" resultMap="map">
+		SELECT * FROM t_comment c JOIN t_user u ON c.c_u_id=u.u_id JOIN t_goods g ON c.c_g_id=g.g_id WHERE g_id=#{id};
+	</select>
+	<resultMap type="CommentBean" id="map">
+		<id property="id" column="c_id"/>
+		<result property="content" column="c_content"/>
+		<result property="time" column="c_time"/>
+		<association property="user" javaType="UserBean">
+			<id property="id" column="u_id"/>
+			<result property="name" column="u_name"/>
+		</association>
+	</resultMap>
+	
+	<insert id="addComment" parameterType="CommentBean">
+		insert into t_comment(c_content,c_time,c_u_id,c_g_id) values(#{content},#{time},#{user.id},#{goods.id});
+	</insert>
+	
+	<update id="addCommentNum" parameterType="int">
+		update t_goods set g_commentNum=g_commentNum+1 where g_id=#{id};
+	</update>
+	
+	
+</mapper>
